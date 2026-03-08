@@ -1,18 +1,19 @@
-import { useState } from "react";
-import { Menu, X } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
+import { useState } from "react";
+import { Menu, X, ArrowLeft } from "lucide-react";
+import { AnimatePresence } from "framer-motion";
 
 const navLinks = [
-  { label: "Home", href: "#home", type: "hash" as const },
-  { label: "About", href: "/about", type: "route" as const },
-  { label: "Services", href: "#services", type: "hash" as const },
-  { label: "Daily Motivation", href: "#motivation", type: "hash" as const },
-  { label: "Assessment", href: "#assessment", type: "hash" as const },
-  { label: "Contact", href: "#contact", type: "hash" as const },
+  { label: "Home", href: "/" },
+  { label: "About", href: "/about" },
+  { label: "Services", href: "/#services" },
+  { label: "Daily Motivation", href: "/#motivation" },
+  { label: "Assessment", href: "/#assessment" },
+  { label: "Contact", href: "/#contact" },
 ];
 
-const Navbar = () => {
+const PageNavbar = () => {
   const [open, setOpen] = useState(false);
 
   return (
@@ -22,11 +23,10 @@ const Navbar = () => {
           Melodia
         </Link>
 
-        {/* Desktop */}
         <ul className="hidden lg:flex items-center gap-8">
           {navLinks.map((link) => (
             <li key={link.href}>
-              {link.type === "route" ? (
+              {link.href.startsWith("/") && !link.href.includes("#") ? (
                 <Link
                   to={link.href}
                   className="font-body text-sm tracking-wide text-muted-foreground hover:text-foreground transition-colors"
@@ -46,13 +46,12 @@ const Navbar = () => {
         </ul>
 
         <a
-          href="#contact"
+          href="/#contact"
           className="hidden lg:inline-flex rounded-full bg-primary px-6 py-2.5 text-sm font-medium text-primary-foreground hover:bg-sage-dark transition-colors"
         >
           Book a Call
         </a>
 
-        {/* Mobile toggle */}
         <button
           className="lg:hidden text-foreground"
           onClick={() => setOpen(!open)}
@@ -62,7 +61,6 @@ const Navbar = () => {
         </button>
       </div>
 
-      {/* Mobile menu */}
       <AnimatePresence>
         {open && (
           <motion.div
@@ -74,7 +72,7 @@ const Navbar = () => {
             <ul className="flex flex-col items-center gap-4 py-6">
               {navLinks.map((link) => (
                 <li key={link.href}>
-                  {link.type === "route" ? (
+                  {link.href.startsWith("/") && !link.href.includes("#") ? (
                     <Link
                       to={link.href}
                       onClick={() => setOpen(false)}
@@ -95,7 +93,7 @@ const Navbar = () => {
               ))}
               <li>
                 <a
-                  href="#contact"
+                  href="/#contact"
                   onClick={() => setOpen(false)}
                   className="rounded-full bg-primary px-6 py-2.5 text-sm font-medium text-primary-foreground"
                 >
@@ -110,4 +108,4 @@ const Navbar = () => {
   );
 };
 
-export default Navbar;
+export default PageNavbar;
