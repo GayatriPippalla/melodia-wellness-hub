@@ -97,8 +97,8 @@ const LoginPage = () => {
                 animate={{ opacity: 1, scale: 1 }}
                 className="glass-card rounded-3xl p-8 text-center"
               >
-                <div className="w-14 h-14 rounded-full bg-amber-100 flex items-center justify-center mx-auto mb-4">
-                  <Clock size={24} className="text-amber-600" />
+                <div className="w-14 h-14 rounded-full bg-accent flex items-center justify-center mx-auto mb-4">
+                  <Clock size={24} className="text-accent-foreground" />
                 </div>
                 <h2 className="font-display text-xl font-semibold text-foreground mb-2">
                   Approval Pending
