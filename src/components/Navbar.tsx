@@ -69,7 +69,7 @@ const Navbar = ({ transparent = true }: NavbarProps) => {
   return (
     <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${bgClass}`}>
       <div className="container mx-auto flex items-center justify-between py-4 px-4 md:px-8">
-        <Link to="/" className="font-display text-2xl md:text-3xl font-semibold tracking-wide text-foreground">
+        <Link to="/home" className="font-display text-2xl md:text-3xl font-semibold tracking-wide text-foreground">
           Melodia
         </Link>
 
