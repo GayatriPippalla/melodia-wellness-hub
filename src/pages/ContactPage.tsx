@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/components/ui/sonner";
+import { supabase } from "@/integrations/supabase/client";
 
 const ContactPage = () => {
   const [formSent, setFormSent] = useState(false);
@@ -22,20 +23,43 @@ const ContactPage = () => {
       return;
     }
     setLoading(true);
-    // Simulate send — replace with edge function / DB insert later
-    await new Promise((r) => setTimeout(r, 800));
-    setFormSent(true);
-    setLoading(false);
+    try {
+      const { error } = await supabase.from("contact_messages").insert({
+        name: form.name,
+        email: form.email,
+        message: form.message,
+      });
+      if (error) throw error;
+      setFormSent(true);
+    } catch (err: any) {
+      toast("Something went wrong. Please try again.");
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleNewsletter = (e: React.FormEvent) => {
+  const handleNewsletter = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!newsletterEmail) {
       toast("Please enter your email.");
       return;
     }
-    setSubscribed(true);
-    toast("You're subscribed! Welcome to the Melodia community.");
+    try {
+      const { error } = await supabase.from("newsletter_subscribers").insert({ email: newsletterEmail });
+      if (error) {
+        if (error.code === "23505") {
+          toast("You're already subscribed!");
+        } else {
+          throw error;
+        }
+      }
+      setSubscribed(true);
+      toast("You're subscribed! Welcome to the Melodia community.");
+    } catch (err: any) {
+      toast("Something went wrong. Please try again.");
+      console.error(err);
+    }
   };
 
   return (
