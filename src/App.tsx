@@ -9,6 +9,7 @@ import ServicesPage from "./pages/ServicesPage";
 import DailyMotivationPage from "./pages/DailyMotivationPage";
 import WellnessAssessmentPage from "./pages/WellnessAssessmentPage";
 import ContactPage from "./pages/ContactPage";
+import AdminPage from "./pages/AdminPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
