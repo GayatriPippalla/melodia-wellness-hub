@@ -7,7 +7,7 @@ const navLinks = [
   { label: "Home", href: "#home", type: "hash" as const },
   { label: "About", href: "/about", type: "route" as const },
   { label: "Services", href: "/services", type: "route" as const },
-  { label: "Daily Motivation", href: "#motivation", type: "hash" as const },
+  { label: "Daily Motivation", href: "/motivation", type: "route" as const },
   { label: "Assessment", href: "#assessment", type: "hash" as const },
   { label: "Contact", href: "#contact", type: "hash" as const },
 ];
