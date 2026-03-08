@@ -14,7 +14,39 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      wellness_assessments: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          main_goal: string
+          name: string
+          sleep_quality: string
+          stress_level: number
+          work_life_balance: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+          main_goal: string
+          name: string
+          sleep_quality: string
+          stress_level: number
+          work_life_balance: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          main_goal?: string
+          name?: string
+          sleep_quality?: string
+          stress_level?: number
+          work_life_balance?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
