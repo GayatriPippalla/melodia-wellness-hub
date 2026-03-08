@@ -6,6 +6,7 @@ import Services from "@/components/Services";
 import DailyMotivation from "@/components/DailyMotivation";
 import WellnessAssessment from "@/components/WellnessAssessment";
 import CallToAction from "@/components/CallToAction";
+import Testimonials from "@/components/Testimonials";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 
@@ -18,6 +19,7 @@ const Index = () => (
     <Services />
     <DailyMotivation />
     <WellnessAssessment />
+    <Testimonials />
     <CallToAction />
     <Contact />
     <Footer />
