@@ -39,14 +39,27 @@ const ContactPage = () => {
     }
   };
 
-  const handleNewsletter = (e: React.FormEvent) => {
+  const handleNewsletter = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!newsletterEmail) {
       toast("Please enter your email.");
       return;
     }
-    setSubscribed(true);
-    toast("You're subscribed! Welcome to the Melodia community.");
+    try {
+      const { error } = await supabase.from("newsletter_subscribers").insert({ email: newsletterEmail });
+      if (error) {
+        if (error.code === "23505") {
+          toast("You're already subscribed!");
+        } else {
+          throw error;
+        }
+      }
+      setSubscribed(true);
+      toast("You're subscribed! Welcome to the Melodia community.");
+    } catch (err: any) {
+      toast("Something went wrong. Please try again.");
+      console.error(err);
+    }
   };
 
   return (
