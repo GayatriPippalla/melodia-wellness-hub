@@ -16,6 +16,15 @@ const LoginPage = () => {
   const [pendingMessage, setPendingMessage] = useState(false);
   const navigate = useNavigate();
 
+  // Redirect already-authenticated users away from login
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session) {
+        navigate("/dashboard", { replace: true });
+      }
+    });
+  }, [navigate]);
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
