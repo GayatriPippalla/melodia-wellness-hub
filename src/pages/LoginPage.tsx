@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Lock, Mail, KeyRound, Clock, CheckCircle2 } from "lucide-react";
+import { Lock, Mail, KeyRound, Clock } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/components/ui/sonner";
-import PageNavbar from "@/components/PageNavbar";
+import About from "@/components/About";
 import Footer from "@/components/Footer";
 
 const LoginPage = () => {
@@ -16,11 +16,10 @@ const LoginPage = () => {
   const [pendingMessage, setPendingMessage] = useState(false);
   const navigate = useNavigate();
 
-  // Redirect already-authenticated users away from login
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (session) {
-        navigate("/dashboard", { replace: true });
+        navigate("/home", { replace: true });
       }
     });
   }, [navigate]);
@@ -34,14 +33,12 @@ const LoginPage = () => {
       const { error } = await supabase.auth.signInWithPassword({ email, password });
       if (error) throw error;
 
-      // Check profile status
       const { data: profile, error: profileErr } = await supabase
         .from("profiles")
         .select("status")
         .single();
 
       if (profileErr || !profile) {
-        // Could be an admin — check admin role
         const { data: roles } = await supabase
           .from("user_roles")
           .select("role")
@@ -69,8 +66,7 @@ const LoginPage = () => {
         return;
       }
 
-      // Approved — redirect to dashboard
-      navigate("/dashboard");
+      navigate("/home");
     } catch (err: any) {
       toast(err.message || "Login failed.");
     } finally {
@@ -80,8 +76,17 @@ const LoginPage = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <PageNavbar />
-      <section className="pt-32 pb-24 px-4">
+      {/* Simple header */}
+      <div className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">
+        <div className="container mx-auto flex items-center justify-between py-4 px-4 md:px-8">
+          <span className="font-display text-2xl md:text-3xl font-semibold tracking-wide text-foreground">
+            Melodia
+          </span>
+        </div>
+      </div>
+
+      {/* Login form */}
+      <section className="pt-32 pb-16 px-4">
         <div className="container mx-auto max-w-md">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -93,10 +98,10 @@ const LoginPage = () => {
                 <Lock size={28} className="text-primary" />
               </div>
               <h1 className="font-display text-4xl md:text-5xl font-light text-foreground leading-tight">
-                Welcome <span className="italic gradient-text">Back</span>
+                Welcome to <span className="italic gradient-text">Melodia</span>
               </h1>
               <p className="font-body text-sm text-muted-foreground mt-3">
-                Sign in to your Melodia Wellness account
+                Sign in to access your wellness journey
               </p>
             </div>
 
@@ -126,35 +131,17 @@ const LoginPage = () => {
             ) : (
               <form onSubmit={handleLogin} className="glass-card rounded-3xl p-8 space-y-5">
                 <div>
-                  <label className="font-body text-sm font-medium text-foreground mb-2 block">
-                    Email
-                  </label>
+                  <label className="font-body text-sm font-medium text-foreground mb-2 block">Email</label>
                   <div className="relative">
                     <Mail size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
-                    <Input
-                      type="email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      placeholder="you@example.com"
-                      className="font-body pl-10"
-                      required
-                    />
+                    <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@example.com" className="font-body pl-10" required />
                   </div>
                 </div>
                 <div>
-                  <label className="font-body text-sm font-medium text-foreground mb-2 block">
-                    Password
-                  </label>
+                  <label className="font-body text-sm font-medium text-foreground mb-2 block">Password</label>
                   <div className="relative">
                     <KeyRound size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
-                    <Input
-                      type="password"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      placeholder="••••••••"
-                      className="font-body pl-10"
-                      required
-                    />
+                    <Input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="••••••••" className="font-body pl-10" required />
                   </div>
                 </div>
 
@@ -164,15 +151,16 @@ const LoginPage = () => {
 
                 <p className="font-body text-xs text-center text-muted-foreground">
                   Don't have an account?{" "}
-                  <Link to="/signup" className="text-primary hover:underline">
-                    Sign up
-                  </Link>
+                  <Link to="/signup" className="text-primary hover:underline">Sign up</Link>
                 </p>
               </form>
             )}
           </motion.div>
         </div>
       </section>
+
+      {/* About section below */}
+      <About />
       <Footer />
     </div>
   );

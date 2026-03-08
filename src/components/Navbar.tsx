@@ -5,7 +5,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 
 const navLinks = [
-  { label: "Home", href: "/" },
+  { label: "Home", href: "/home" },
   { label: "About", href: "/about" },
   { label: "Services", href: "/services" },
   { label: "Daily Motivation", href: "/motivation" },
@@ -69,7 +69,7 @@ const Navbar = ({ transparent = true }: NavbarProps) => {
   return (
     <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${bgClass}`}>
       <div className="container mx-auto flex items-center justify-between py-4 px-4 md:px-8">
-        <Link to="/" className="font-display text-2xl md:text-3xl font-semibold tracking-wide text-foreground">
+        <Link to="/home" className="font-display text-2xl md:text-3xl font-semibold tracking-wide text-foreground">
           Melodia
         </Link>
 
