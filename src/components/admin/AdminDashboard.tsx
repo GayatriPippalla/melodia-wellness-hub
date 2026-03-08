@@ -133,7 +133,7 @@ const AdminDashboard = ({ onLogout }: AdminDashboardProps) => {
       </header>
 
       <div className="container mx-auto px-4 md:px-8 py-8">
-        <Tabs defaultValue="posts">
+        <Tabs defaultValue="users">
           <TabsList className="mb-8 flex flex-wrap">
             <TabsTrigger value="users" className="gap-1.5"><UserCheck size={14} /> Users</TabsTrigger>
             <TabsTrigger value="posts" className="gap-1.5"><Sparkles size={14} /> Posts</TabsTrigger>

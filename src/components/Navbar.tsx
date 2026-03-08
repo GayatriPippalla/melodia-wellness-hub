@@ -4,12 +4,13 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Link, useLocation } from "react-router-dom";
 
 const navLinks = [
-  { label: "Home", href: "/", type: "route" as const },
-  { label: "About", href: "/about", type: "route" as const },
-  { label: "Services", href: "/services", type: "route" as const },
-  { label: "Daily Motivation", href: "/motivation", type: "route" as const },
-  { label: "Assessment", href: "/assessment", type: "route" as const },
-  { label: "Contact", href: "/contact", type: "route" as const },
+  { label: "Home", href: "/" },
+  { label: "About", href: "/about" },
+  { label: "Services", href: "/services" },
+  { label: "Daily Motivation", href: "/motivation" },
+  { label: "Assessment", href: "/assessment" },
+  { label: "Contact", href: "/contact" },
+  { label: "Sign Up", href: "/signup" },
 ];
 
 const Navbar = () => {
