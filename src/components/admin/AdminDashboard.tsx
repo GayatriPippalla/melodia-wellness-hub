@@ -90,11 +90,29 @@ const AdminDashboard = ({ onLogout }: AdminDashboardProps) => {
     setSubsLoading(false);
   };
 
+  // --- User Profiles ---
+  const [profiles, setProfiles] = useState<any[]>([]);
+  const [profilesLoading, setProfilesLoading] = useState(true);
+
+  const fetchProfiles = async () => {
+    setProfilesLoading(true);
+    const { data } = await supabase.from("profiles").select("*").order("created_at", { ascending: false });
+    setProfiles(data || []);
+    setProfilesLoading(false);
+  };
+
+  const updateUserStatus = async (id: string, status: "approved" | "rejected") => {
+    await supabase.from("profiles").update({ status }).eq("id", id);
+    toast(`User ${status}.`);
+    fetchProfiles();
+  };
+
   useEffect(() => {
     fetchPosts();
     fetchAssessments();
     fetchMessages();
     fetchSubscribers();
+    fetchProfiles();
   }, []);
 
   const handleLogout = async () => {
