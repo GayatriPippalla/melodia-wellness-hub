@@ -10,7 +10,7 @@ const navLinks = [
   { label: "Services", href: "/services" },
   { label: "Daily Motivation", href: "/motivation" },
   { label: "Assessment", href: "/assessment" },
-  { label: "Contact", href: "/#contact" },
+  { label: "Contact", href: "/contact" },
 ];
 
 const PageNavbar = () => {
