@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/components/ui/sonner";
+import { BackgroundPaths } from "@/components/ui/background-paths";
 import About from "@/components/About";
 import Footer from "@/components/Footer";
 
@@ -76,7 +77,7 @@ const LoginPage = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Simple header */}
+      {/* Header */}
       <div className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">
         <div className="container mx-auto flex items-center justify-between py-4 px-4 md:px-8">
           <span className="font-display text-2xl md:text-3xl font-semibold tracking-wide text-foreground">
@@ -85,79 +86,77 @@ const LoginPage = () => {
         </div>
       </div>
 
-      {/* Login form */}
-      <section className="pt-32 pb-16 px-4">
-        <div className="container mx-auto max-w-md">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-          >
-            <div className="text-center mb-10">
-              <div className="w-16 h-16 rounded-2xl bg-accent flex items-center justify-center mx-auto mb-4">
-                <Lock size={28} className="text-primary" />
+      {/* Login with animated background */}
+      <BackgroundPaths>
+        <section className="pt-32 pb-16 px-4">
+          <div className="container mx-auto max-w-md">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <div className="text-center mb-10">
+                <div className="w-16 h-16 rounded-2xl bg-accent flex items-center justify-center mx-auto mb-4">
+                  <Lock size={28} className="text-primary" />
+                </div>
+                <h1 className="font-display text-4xl md:text-5xl font-light text-foreground leading-tight">
+                  Welcome to <span className="italic gradient-text">Melodia</span>
+                </h1>
+                <p className="font-body text-sm text-muted-foreground mt-3">
+                  Sign in to access your wellness journey
+                </p>
               </div>
-              <h1 className="font-display text-4xl md:text-5xl font-light text-foreground leading-tight">
-                Welcome to <span className="italic gradient-text">Melodia</span>
-              </h1>
-              <p className="font-body text-sm text-muted-foreground mt-3">
-                Sign in to access your wellness journey
-              </p>
-            </div>
 
-            {pendingMessage ? (
-              <motion.div
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                className="glass-card rounded-3xl p-8 text-center"
-              >
-                <div className="w-14 h-14 rounded-full bg-accent flex items-center justify-center mx-auto mb-4">
-                  <Clock size={24} className="text-accent-foreground" />
-                </div>
-                <h2 className="font-display text-xl font-semibold text-foreground mb-2">
-                  Approval Pending
-                </h2>
-                <p className="font-body text-sm text-muted-foreground leading-relaxed">
-                  Your account is waiting for admin approval. You'll be able to log in once your account has been approved.
-                </p>
-                <Button
-                  variant="outline"
-                  className="mt-6 rounded-full"
-                  onClick={() => setPendingMessage(false)}
+              {pendingMessage ? (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  className="glass-card rounded-3xl p-8 text-center"
                 >
-                  Try Again
-                </Button>
-              </motion.div>
-            ) : (
-              <form onSubmit={handleLogin} className="glass-card rounded-3xl p-8 space-y-5">
-                <div>
-                  <label className="font-body text-sm font-medium text-foreground mb-2 block">Email</label>
-                  <div className="relative">
-                    <Mail size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
-                    <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@example.com" className="font-body pl-10" required />
+                  <div className="w-14 h-14 rounded-full bg-accent flex items-center justify-center mx-auto mb-4">
+                    <Clock size={24} className="text-accent-foreground" />
                   </div>
-                </div>
-                <div>
-                  <label className="font-body text-sm font-medium text-foreground mb-2 block">Password</label>
-                  <div className="relative">
-                    <KeyRound size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
-                    <Input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="••••••••" className="font-body pl-10" required />
+                  <h2 className="font-display text-xl font-semibold text-foreground mb-2">
+                    Approval Pending
+                  </h2>
+                  <p className="font-body text-sm text-muted-foreground leading-relaxed">
+                    Your account is waiting for admin approval. You'll be able to log in once your account has been approved.
+                  </p>
+                  <Button variant="outline" className="mt-6 rounded-full" onClick={() => setPendingMessage(false)}>
+                    Try Again
+                  </Button>
+                </motion.div>
+              ) : (
+                <form onSubmit={handleLogin} className="glass-card rounded-3xl p-8 space-y-5 backdrop-blur-md">
+                  <div>
+                    <label className="font-body text-sm font-medium text-foreground mb-2 block">Email</label>
+                    <div className="relative">
+                      <Mail size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+                      <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@example.com" className="font-body pl-10" required />
+                    </div>
                   </div>
-                </div>
+                  <div>
+                    <label className="font-body text-sm font-medium text-foreground mb-2 block">Password</label>
+                    <div className="relative">
+                      <KeyRound size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+                      <Input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="••••••••" className="font-body pl-10" required />
+                    </div>
+                  </div>
 
-                <Button type="submit" disabled={loading} className="w-full rounded-full">
-                  {loading ? "Signing in…" : "Sign In"}
-                </Button>
+                  <Button type="submit" disabled={loading} className="w-full rounded-full">
+                    {loading ? "Signing in…" : "Sign In"}
+                  </Button>
 
-                <p className="font-body text-xs text-center text-muted-foreground">
-                  Don't have an account?{" "}
-                  <Link to="/signup" className="text-primary hover:underline">Sign up</Link>
-                </p>
-              </form>
-            )}
-          </motion.div>
-        </div>
-      </section>
+                  <p className="font-body text-xs text-center text-muted-foreground">
+                    Don't have an account?{" "}
+                    <Link to="/signup" className="text-primary hover:underline">Sign up</Link>
+                  </p>
+                </form>
+              )}
+            </motion.div>
+          </div>
+        </section>
+      </BackgroundPaths>
 
       {/* About section below */}
       <About />
