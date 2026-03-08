@@ -9,7 +9,7 @@ const navLinks = [
   { label: "Services", href: "/services", type: "route" as const },
   { label: "Daily Motivation", href: "/motivation", type: "route" as const },
   { label: "Assessment", href: "/assessment", type: "route" as const },
-  { label: "Contact", href: "#contact", type: "hash" as const },
+  { label: "Contact", href: "/contact", type: "route" as const },
 ];
 
 const Navbar = () => {
