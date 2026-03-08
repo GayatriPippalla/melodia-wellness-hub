@@ -36,10 +36,10 @@ const About = () => (
             Your journey to <span className="italic">wholeness</span> starts here
           </h2>
           <p className="font-body text-muted-foreground leading-relaxed mb-6">
-            I'm a certified holistic wellness coach dedicated to helping you find balance across mind, body, and spirit. With over 8 years of experience, I blend evidence-based practices with intuitive guidance to create a path uniquely yours.
+            At Melodia Wellness, we believe true well-being is a harmonious blend of mind, body, and spirit. Our holistic approach draws from time-tested practices and modern science to guide you toward lasting transformation.
           </p>
           <p className="font-body text-muted-foreground leading-relaxed mb-8">
-            Whether you're navigating burnout, seeking clarity, or ready to elevate your well-being, I'll meet you exactly where you are — with compassion, expertise, and a personalized plan that grows with you.
+            We meet you exactly where you are — with compassion, expertise, and a personalized plan designed to help you rediscover your inner rhythm and live a life filled with vitality and purpose.
           </p>
           <div className="flex gap-12">
             {[
