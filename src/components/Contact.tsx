@@ -111,7 +111,7 @@ const Contact = () => {
               <p className="font-body text-sm text-muted-foreground mb-6">
                 Weekly wellness tips, guided meditations, and exclusive offers — delivered with love.
               </p>
-              <form onSubmit={handleNewsletter} className="flex gap-3">
+              <form onSubmit={handleNewsletter} className="flex flex-col sm:flex-row gap-3">
                 <input
                   type="email"
                   value={email}
