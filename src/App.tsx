@@ -8,6 +8,7 @@ import AboutPage from "./pages/AboutPage";
 import ServicesPage from "./pages/ServicesPage";
 import DailyMotivationPage from "./pages/DailyMotivationPage";
 import WellnessAssessmentPage from "./pages/WellnessAssessmentPage";
+import ContactPage from "./pages/ContactPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
