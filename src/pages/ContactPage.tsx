@@ -23,10 +23,20 @@ const ContactPage = () => {
       return;
     }
     setLoading(true);
-    // Simulate send — replace with edge function / DB insert later
-    await new Promise((r) => setTimeout(r, 800));
-    setFormSent(true);
-    setLoading(false);
+    try {
+      const { error } = await supabase.from("contact_messages").insert({
+        name: form.name,
+        email: form.email,
+        message: form.message,
+      });
+      if (error) throw error;
+      setFormSent(true);
+    } catch (err: any) {
+      toast("Something went wrong. Please try again.");
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleNewsletter = (e: React.FormEvent) => {
