@@ -1,24 +1,22 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Quote, Sparkles, Lightbulb, Heart, BookOpen,
-  Plus, X, Filter,
+  Filter,
 } from "lucide-react";
 import PageNavbar from "@/components/PageNavbar";
 import Footer from "@/components/Footer";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
+import { supabase } from "@/integrations/supabase/client";
 
 type Category = "quotes" | "affirmations" | "stories" | "tips" | "appreciations";
 
 interface Post {
-  id: number;
+  id: string;
   category: Category;
   title: string;
   content: string;
-  author?: string;
+  author?: string | null;
 }
 
 const categoryMeta: Record<Category, { label: string; icon: typeof Quote; color: string }> = {
@@ -29,40 +27,23 @@ const categoryMeta: Record<Category, { label: string; icon: typeof Quote; color:
   appreciations: { label: "Appreciations", icon: Heart, color: "bg-sand-light text-sand-dark" },
 };
 
-const initialPosts: Post[] = [
-  { id: 1, category: "quotes", title: "Inner Peace", content: "The body heals with play, the mind heals with laughter, and the spirit heals with joy.", author: "Proverb" },
-  { id: 2, category: "quotes", title: "Unplug & Recharge", content: "Almost everything will work again if you unplug it for a few minutes — including you.", author: "Anne Lamott" },
-  { id: 3, category: "affirmations", title: "Morning Affirmation", content: "I am worthy of peace, love, and joy. Today I choose to nurture my mind, body, and spirit." },
-  { id: 4, category: "affirmations", title: "Self-Worth", content: "I release what no longer serves me and welcome growth with open arms." },
-  { id: 5, category: "stories", title: "From Burnout to Balance", content: "After years of chronic stress, Sarah discovered mindfulness meditation. Within six months, she transformed her daily routine and found a new sense of purpose that rippled through every area of her life." },
-  { id: 6, category: "tips", title: "5-Minute Breathing", content: "Try box breathing: inhale for 4 counts, hold for 4, exhale for 4, hold for 4. Repeat 5 times to reset your nervous system instantly." },
-  { id: 7, category: "tips", title: "Digital Detox Hour", content: "Dedicate one hour before bed to screen-free time. Read, journal, or simply sit in stillness — your sleep quality will thank you." },
-  { id: 8, category: "appreciations", title: "Gratitude Moment", content: "Take a moment to appreciate the people who show up for you, the roof over your head, and the simple gift of today." },
-  { id: 9, category: "quotes", title: "Greatest Wealth", content: "The greatest wealth is health.", author: "Virgil" },
-  { id: 10, category: "affirmations", title: "Evening Reflection", content: "I am grateful for today's lessons. I trust the journey and surrender to rest." },
-  { id: 11, category: "stories", title: "A Walk That Changed Everything", content: "James started with a 10-minute walk each morning. That small commitment grew into a complete lifestyle transformation — better nutrition, deeper sleep, and a calmer mind." },
-  { id: 12, category: "appreciations", title: "Nature's Gift", content: "Pause and notice the sky today. Whether cloudy or clear, it holds infinite beauty — a reminder that there's always something to appreciate." },
-];
-
 const categories: Category[] = ["quotes", "affirmations", "stories", "tips", "appreciations"];
 
 const DailyMotivationPage = () => {
-  const [posts, setPosts] = useState<Post[]>(initialPosts);
+  const [posts, setPosts] = useState<Post[]>([]);
   const [activeFilter, setActiveFilter] = useState<Category | "all">("all");
-  const [showAdmin, setShowAdmin] = useState(false);
-  const [newPost, setNewPost] = useState({ category: "quotes" as Category, title: "", content: "", author: "" });
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      const { data } = await supabase.from("motivation_posts").select("*").order("created_at", { ascending: false });
+      setPosts((data as Post[]) || []);
+      setLoading(false);
+    };
+    fetchPosts();
+  }, []);
 
   const filtered = activeFilter === "all" ? posts : posts.filter((p) => p.category === activeFilter);
-
-  const handleAdd = () => {
-    if (!newPost.title.trim() || !newPost.content.trim()) return;
-    setPosts((prev) => [
-      { ...newPost, id: Date.now(), author: newPost.author || undefined },
-      ...prev,
-    ]);
-    setNewPost({ category: "quotes", title: "", content: "", author: "" });
-    setShowAdmin(false);
-  };
 
   return (
     <div className="min-h-screen bg-background">
