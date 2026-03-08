@@ -9,6 +9,7 @@ import { Slider } from "@/components/ui/slider";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/components/ui/sonner";
 import { BackgroundPaths } from "@/components/ui/background-paths";
+import About from "@/components/About";
 import Footer from "@/components/Footer";
 
 const SignupPage = () => {
