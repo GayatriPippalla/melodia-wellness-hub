@@ -92,80 +92,8 @@ const DailyMotivationPage = () => {
               );
             })}
           </div>
-          <Button
-            size="sm"
-            variant={showAdmin ? "outline" : "default"}
-            onClick={() => setShowAdmin(!showAdmin)}
-            className="rounded-full text-xs gap-1.5"
-          >
-            {showAdmin ? <X size={14} /> : <Plus size={14} />}
-            {showAdmin ? "Close" : "Add Post"}
-          </Button>
         </div>
       </div>
-
-      {/* Admin Panel */}
-      <AnimatePresence>
-        {showAdmin && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            className="overflow-hidden border-b border-border bg-sand-light"
-          >
-            <div className="container mx-auto px-4 md:px-8 py-8">
-              <h3 className="font-display text-xl font-semibold text-foreground mb-4">New Post</h3>
-              <div className="grid sm:grid-cols-2 gap-4 max-w-2xl">
-                <div>
-                  <label className="font-body text-xs text-muted-foreground mb-1 block">Category</label>
-                  <select
-                    value={newPost.category}
-                    onChange={(e) => setNewPost({ ...newPost, category: e.target.value as Category })}
-                    className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm font-body"
-                  >
-                    {categories.map((c) => (
-                      <option key={c} value={c}>{categoryMeta[c].label}</option>
-                    ))}
-                  </select>
-                </div>
-                <div>
-                  <label className="font-body text-xs text-muted-foreground mb-1 block">Author (optional)</label>
-                  <Input
-                    value={newPost.author}
-                    onChange={(e) => setNewPost({ ...newPost, author: e.target.value })}
-                    placeholder="Author name"
-                    className="font-body"
-                  />
-                </div>
-                <div className="sm:col-span-2">
-                  <label className="font-body text-xs text-muted-foreground mb-1 block">Title</label>
-                  <Input
-                    value={newPost.title}
-                    onChange={(e) => setNewPost({ ...newPost, title: e.target.value })}
-                    placeholder="Post title"
-                    className="font-body"
-                  />
-                </div>
-                <div className="sm:col-span-2">
-                  <label className="font-body text-xs text-muted-foreground mb-1 block">Content</label>
-                  <Textarea
-                    value={newPost.content}
-                    onChange={(e) => setNewPost({ ...newPost, content: e.target.value })}
-                    placeholder="Write your motivational content…"
-                    className="font-body min-h-[100px]"
-                  />
-                </div>
-                <div className="sm:col-span-2">
-                  <Button onClick={handleAdd} className="rounded-full gap-2">
-                    <Plus size={14} />
-                    Publish Post
-                  </Button>
-                </div>
-              </div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
 
       {/* Posts Grid */}
       <section className="py-16 md:py-20">
