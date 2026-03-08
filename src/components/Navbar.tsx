@@ -18,20 +18,29 @@ const Navbar = () => {
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">
       <div className="container mx-auto flex items-center justify-between py-4 px-4 md:px-8">
-        <a href="#home" className="font-display text-2xl md:text-3xl font-semibold tracking-wide text-foreground">
+        <Link to="/" className="font-display text-2xl md:text-3xl font-semibold tracking-wide text-foreground">
           Melodia
-        </a>
+        </Link>
 
         {/* Desktop */}
         <ul className="hidden lg:flex items-center gap-8">
           {navLinks.map((link) => (
             <li key={link.href}>
-              <a
-                href={link.href}
-                className="font-body text-sm tracking-wide text-muted-foreground hover:text-foreground transition-colors"
-              >
-                {link.label}
-              </a>
+              {link.type === "route" ? (
+                <Link
+                  to={link.href}
+                  className="font-body text-sm tracking-wide text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  {link.label}
+                </Link>
+              ) : (
+                <a
+                  href={link.href}
+                  className="font-body text-sm tracking-wide text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  {link.label}
+                </a>
+              )}
             </li>
           ))}
         </ul>
