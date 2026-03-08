@@ -89,6 +89,39 @@ export type Database = {
         }
         Relationships: []
       }
+      profiles: {
+        Row: {
+          created_at: string
+          email: string
+          full_name: string
+          id: string
+          status: Database["public"]["Enums"]["user_status"]
+          stress_level: number
+          user_id: string
+          wellness_goal: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          full_name: string
+          id?: string
+          status?: Database["public"]["Enums"]["user_status"]
+          stress_level: number
+          user_id: string
+          wellness_goal: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          full_name?: string
+          id?: string
+          status?: Database["public"]["Enums"]["user_status"]
+          stress_level?: number
+          user_id?: string
+          wellness_goal?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           id: string
@@ -155,6 +188,7 @@ export type Database = {
     }
     Enums: {
       app_role: "admin" | "user"
+      user_status: "pending" | "approved" | "rejected"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -283,6 +317,7 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "user"],
+      user_status: ["pending", "approved", "rejected"],
     },
   },
 } as const
