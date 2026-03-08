@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import {
   LogOut, Sparkles, MessageSquare, Mail, Users,
-  Plus, Trash2, Eye, EyeOff, RefreshCw,
+  Plus, Trash2, Eye, EyeOff, RefreshCw, CheckCircle2, XCircle, Clock, UserCheck,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -90,11 +90,29 @@ const AdminDashboard = ({ onLogout }: AdminDashboardProps) => {
     setSubsLoading(false);
   };
 
+  // --- User Profiles ---
+  const [profiles, setProfiles] = useState<any[]>([]);
+  const [profilesLoading, setProfilesLoading] = useState(true);
+
+  const fetchProfiles = async () => {
+    setProfilesLoading(true);
+    const { data } = await supabase.from("profiles").select("*").order("created_at", { ascending: false });
+    setProfiles(data || []);
+    setProfilesLoading(false);
+  };
+
+  const updateUserStatus = async (id: string, status: "approved" | "rejected") => {
+    await supabase.from("profiles").update({ status }).eq("id", id);
+    toast(`User ${status}.`);
+    fetchProfiles();
+  };
+
   useEffect(() => {
     fetchPosts();
     fetchAssessments();
     fetchMessages();
     fetchSubscribers();
+    fetchProfiles();
   }, []);
 
   const handleLogout = async () => {
@@ -115,13 +133,79 @@ const AdminDashboard = ({ onLogout }: AdminDashboardProps) => {
       </header>
 
       <div className="container mx-auto px-4 md:px-8 py-8">
-        <Tabs defaultValue="posts">
+        <Tabs defaultValue="users">
           <TabsList className="mb-8 flex flex-wrap">
+            <TabsTrigger value="users" className="gap-1.5"><UserCheck size={14} /> Users</TabsTrigger>
             <TabsTrigger value="posts" className="gap-1.5"><Sparkles size={14} /> Posts</TabsTrigger>
             <TabsTrigger value="assessments" className="gap-1.5"><Users size={14} /> Assessments</TabsTrigger>
             <TabsTrigger value="messages" className="gap-1.5"><MessageSquare size={14} /> Messages</TabsTrigger>
             <TabsTrigger value="subscribers" className="gap-1.5"><Mail size={14} /> Subscribers</TabsTrigger>
           </TabsList>
+
+          {/* ===== USERS TAB ===== */}
+          <TabsContent value="users">
+            <div className="flex items-center justify-between mb-4">
+              <p className="font-body text-sm text-muted-foreground">
+                {profiles.length} users ({profiles.filter(p => p.status === "pending").length} pending)
+              </p>
+              <Button variant="ghost" size="sm" onClick={fetchProfiles}><RefreshCw size={14} /></Button>
+            </div>
+            {profilesLoading ? (
+              <p className="font-body text-muted-foreground text-center py-8">Loading…</p>
+            ) : profiles.length === 0 ? (
+              <p className="font-body text-muted-foreground text-center py-8">No users yet.</p>
+            ) : (
+              <div className="space-y-3">
+                {profiles.map((p) => (
+                  <motion.div key={p.id} initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+                    className={`rounded-xl border bg-card p-5 ${p.status === "pending" ? "border-amber-300/50" : "border-border"}`}
+                  >
+                    <div className="flex items-start justify-between gap-4">
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 mb-1">
+                          <h4 className="font-display text-sm font-semibold text-foreground">{p.full_name}</h4>
+                          <Badge
+                            variant={p.status === "approved" ? "default" : p.status === "pending" ? "secondary" : "destructive"}
+                            className="text-[10px] uppercase"
+                          >
+                            {p.status === "pending" && <Clock size={10} className="mr-1" />}
+                            {p.status === "approved" && <CheckCircle2 size={10} className="mr-1" />}
+                            {p.status === "rejected" && <XCircle size={10} className="mr-1" />}
+                            {p.status}
+                          </Badge>
+                        </div>
+                        <p className="font-body text-xs text-muted-foreground">{p.email}</p>
+                        <div className="grid grid-cols-2 gap-2 mt-2 text-xs font-body">
+                          <div className="bg-muted rounded-lg p-2">
+                            <span className="text-muted-foreground">Stress:</span>{" "}
+                            <span className="font-medium text-foreground">{p.stress_level}/10</span>
+                          </div>
+                          <div className="bg-muted rounded-lg p-2">
+                            <span className="text-muted-foreground">Joined:</span>{" "}
+                            <span className="font-medium text-foreground">{new Date(p.created_at).toLocaleDateString()}</span>
+                          </div>
+                        </div>
+                        <div className="mt-2">
+                          <span className="font-body text-[10px] text-muted-foreground">Goal:</span>
+                          <p className="font-body text-xs text-foreground line-clamp-2">{p.wellness_goal}</p>
+                        </div>
+                      </div>
+                      {p.status === "pending" && (
+                        <div className="flex flex-col gap-2 shrink-0">
+                          <Button size="sm" className="rounded-full gap-1 text-xs" onClick={() => updateUserStatus(p.id, "approved")}>
+                            <CheckCircle2 size={12} /> Approve
+                          </Button>
+                          <Button size="sm" variant="outline" className="rounded-full gap-1 text-xs text-destructive" onClick={() => updateUserStatus(p.id, "rejected")}>
+                            <XCircle size={12} /> Reject
+                          </Button>
+                        </div>
+                      )}
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            )}
+          </TabsContent>
 
           {/* ===== POSTS TAB ===== */}
           <TabsContent value="posts">
