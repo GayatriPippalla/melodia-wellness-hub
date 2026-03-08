@@ -11,6 +11,7 @@ const navLinks = [
   { label: "Daily Motivation", href: "/motivation" },
   { label: "Assessment", href: "/assessment" },
   { label: "Contact", href: "/contact" },
+  { label: "Sign Up", href: "/signup" },
 ];
 
 const PageNavbar = () => {
