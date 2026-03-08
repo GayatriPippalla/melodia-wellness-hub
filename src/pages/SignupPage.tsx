@@ -205,6 +205,7 @@ const SignupPage = () => {
           </div>
         </section>
       </BackgroundPaths>
+      <About />
       <Footer />
     </div>
   );
