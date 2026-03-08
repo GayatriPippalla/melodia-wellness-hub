@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Lock, Mail, KeyRound, Clock, CheckCircle2 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
@@ -15,6 +15,15 @@ const LoginPage = () => {
   const [loading, setLoading] = useState(false);
   const [pendingMessage, setPendingMessage] = useState(false);
   const navigate = useNavigate();
+
+  // Redirect already-authenticated users away from login
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session) {
+        navigate("/dashboard", { replace: true });
+      }
+    });
+  }, [navigate]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
