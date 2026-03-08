@@ -40,7 +40,7 @@ const Footer = () => (
 
           {/* Contact */}
           <div className="md:text-right">
-            <p className="font-body text-sm text-primary-foreground/50 mb-1">hello@melodiawellness.com</p>
+            <p className="font-body text-sm text-primary-foreground/50 mb-1">melodia@wellness.com</p>
             <p className="font-body text-sm text-primary-foreground/50">Austin, TX</p>
           </div>
         </div>
