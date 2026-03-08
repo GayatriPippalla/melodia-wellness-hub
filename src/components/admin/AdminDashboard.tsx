@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import {
   LogOut, Sparkles, MessageSquare, Mail, Users,
-  Plus, Trash2, Eye, EyeOff, RefreshCw,
+  Plus, Trash2, Eye, EyeOff, RefreshCw, CheckCircle2, XCircle, Clock, UserCheck,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
