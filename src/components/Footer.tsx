@@ -51,7 +51,7 @@ const Footer = () => (
             © {new Date().getFullYear()} Melodia Wellness. All rights reserved.
           </p>
           <p className="font-body text-xs text-primary-foreground/30 flex items-center gap-1">
-            Made with <Heart size={10} className="text-primary" /> for your wellness
+            Made with <Heart size={10} className="text-primary" /> from Melodia
           </p>
         </div>
       </div>
