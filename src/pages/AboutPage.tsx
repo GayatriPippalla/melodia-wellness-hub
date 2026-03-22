@@ -3,6 +3,7 @@ import { Eye, Music, Leaf, Heart } from "lucide-react";
 import PageNavbar from "@/components/PageNavbar";
 import Footer from "@/components/Footer";
 import founderImg from "@/assets/founder-story.jpg";
+import FallingFeathers from "@/components/FallingFeathers";
 
 const fadeIn = {
   hidden: { opacity: 0, y: 30 },
@@ -10,11 +11,12 @@ const fadeIn = {
 };
 
 const AboutPage = () => (
-  <div className="min-h-screen bg-background">
+  <div className="min-h-screen bg-background relative">
+    <FallingFeathers />
     <PageNavbar />
 
     {/* Page Header */}
-    <section className="pt-32 pb-16 md:pt-40 md:pb-20 bg-cream">
+    <section className="pt-32 pb-8 md:pt-40 md:pb-10 bg-cream">
       <div className="container mx-auto px-4 md:px-8 text-center">
         <motion.p
           initial={{ opacity: 0, y: 15 }}
@@ -35,8 +37,9 @@ const AboutPage = () => (
       </div>
     </section>
 
+
     {/* Vision */}
-    <section className="py-24 md:py-32 bg-background">
+    <section className="pt-12 pb-24 md:pt-16 md:pb-32 bg-background">
       <div className="container mx-auto px-4 md:px-8 max-w-3xl text-center">
         <motion.div
           variants={fadeIn}

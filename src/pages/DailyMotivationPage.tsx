@@ -2,12 +2,13 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import {
   Quote, Sparkles, Lightbulb, Heart, BookOpen,
-  Filter,
+  Filter, File, Video, Play, ExternalLink
 } from "lucide-react";
 import PageNavbar from "@/components/PageNavbar";
 import Footer from "@/components/Footer";
 import { Badge } from "@/components/ui/badge";
-import { supabase } from "@/integrations/supabase/client";
+import { db } from "@/lib/firebase";
+import { collection, getDocs, query, orderBy } from "firebase/firestore";
 
 type Category = "quotes" | "affirmations" | "stories" | "tips" | "appreciations";
 
@@ -17,6 +18,9 @@ interface Post {
   title: string;
   content: string;
   author?: string | null;
+  file_url?: string | null;
+  file_type?: string | null;
+  file_name?: string | null;
 }
 
 const categoryMeta: Record<Category, { label: string; icon: typeof Quote; color: string }> = {
@@ -36,8 +40,9 @@ const DailyMotivationPage = () => {
 
   useEffect(() => {
     const fetchPosts = async () => {
-      const { data } = await supabase.from("motivation_posts").select("*").order("created_at", { ascending: false });
-      setPosts((data as Post[]) || []);
+      const q = query(collection(db, "motivation_posts"), orderBy("createdAt", "desc"));
+      const snap = await getDocs(q);
+      setPosts(snap.docs.map((d) => ({ id: d.id, ...d.data() } as Post)));
       setLoading(false);
     };
     fetchPosts();
@@ -120,18 +125,59 @@ const DailyMotivationPage = () => {
                       </Badge>
                     </div>
 
-                    <h3 className="font-display text-lg font-semibold text-foreground mb-2 group-hover:text-primary transition-colors">
-                      {post.title}
-                    </h3>
+                    {post.title && (
+                      <h3 className="font-display text-lg font-semibold text-foreground mb-2 group-hover:text-primary transition-colors">
+                        {post.title}
+                      </h3>
+                    )}
+
+                    {post.file_url && post.file_type === 'image' && (
+                      <div className="mb-4 rounded-xl overflow-hidden border border-border/50 aspect-auto max-h-[300px]">
+                        <img 
+                          src={post.file_url} 
+                          alt={post.title} 
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
+                        />
+                      </div>
+                    )}
+
+                    {post.file_url && post.file_type === 'video' && (
+                      <div className="mb-4 rounded-xl overflow-hidden border border-border/50 aspect-video bg-black/5 flex items-center justify-center relative group/video">
+                        <video src={post.file_url} className="w-full h-full object-cover" controls={false} />
+                        <div className="absolute inset-0 flex items-center justify-center bg-black/20 group-hover/video:bg-black/40 transition-colors">
+                          <div className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-white border border-white/30">
+                            <Play size={24} fill="white" />
+                          </div>
+                        </div>
+                        <a href={post.file_url} target="_blank" rel="noreferrer" className="absolute inset-0 z-10" />
+                      </div>
+                    )}
 
                     {post.category === "quotes" ? (
                       <blockquote className="font-display text-base italic text-muted-foreground leading-relaxed border-l-2 border-sage pl-4 mb-3">
                         "{post.content}"
                       </blockquote>
                     ) : (
-                      <p className="font-body text-sm text-muted-foreground leading-relaxed mb-3">
+                      <p className="font-body text-sm text-muted-foreground leading-relaxed mb-3 whitespace-pre-wrap">
                         {post.content}
                       </p>
+                    )}
+
+                    {post.file_url && (post.file_type === 'pdf' || post.file_type === 'other') && (
+                      <a 
+                        href={post.file_url} 
+                        target="_blank" 
+                        rel="noreferrer" 
+                        className="flex items-center justify-between gap-2 px-4 py-3 rounded-xl bg-muted/50 text-foreground text-xs font-body mb-4 hover:bg-muted transition-colors border border-border/50"
+                      >
+                        <div className="flex items-center gap-3 overflow-hidden">
+                          <div className="w-8 h-8 rounded-lg bg-background flex items-center justify-center shrink-0 border border-border">
+                            <File size={16} className={post.file_type === 'pdf' ? "text-red-500" : "text-primary"} />
+                          </div>
+                          <span className="truncate font-medium">{post.file_name || 'Download Attachment'}</span>
+                        </div>
+                        <ExternalLink size={14} className="text-muted-foreground shrink-0" />
+                      </a>
                     )}
 
                     {post.author && (
@@ -167,7 +213,7 @@ const DailyMotivationPage = () => {
               Book a discovery call and let us create a personalized wellness plan just for you.
             </p>
             <a
-              href="/#contact"
+              href="/discovery"
               className="inline-flex rounded-full bg-primary px-8 py-3 font-body text-sm font-medium text-primary-foreground hover:bg-sage-dark transition-colors"
             >
               Book a Discovery Call

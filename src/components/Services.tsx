@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { ClipboardList, Brain, Target, Flower2, Compass, HeartHandshake } from "lucide-react";
+import { ClipboardList, Brain, Target, Flower2, Compass, HeartHandshake, ArrowRight } from "lucide-react";
 
 const services = [
   {
@@ -67,13 +67,20 @@ const Services = () => (
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-60px" }}
             transition={{ duration: 0.6, delay: i * 0.08, ease: [0.22, 1, 0.36, 1] }}
-            className="group glass-card rounded-3xl p-8 transition-all duration-500 hover:shadow-elevated hover:-translate-y-2 hover:bg-card"
           >
-            <div className="w-14 h-14 rounded-2xl bg-accent flex items-center justify-center mb-6 group-hover:bg-primary group-hover:shadow-glow transition-all duration-500">
-              <s.icon size={24} className="text-primary group-hover:text-primary-foreground transition-colors duration-500" />
-            </div>
-            <h3 className="font-display text-xl font-semibold text-foreground mb-3 group-hover:gradient-text transition-all duration-300">{s.title}</h3>
-            <p className="font-body text-sm text-muted-foreground leading-relaxed">{s.desc}</p>
+            <a
+              href={`/discovery?topic=${encodeURIComponent(s.title)}`}
+              className="group glass-card rounded-3xl p-8 h-full transition-all duration-500 hover:shadow-elevated hover:-translate-y-2 hover:bg-card cursor-pointer block"
+            >
+              <div className="w-14 h-14 rounded-2xl bg-accent flex items-center justify-center mb-6 group-hover:bg-primary group-hover:shadow-glow transition-all duration-500">
+                <s.icon size={24} className="text-primary group-hover:text-primary-foreground transition-colors duration-500" />
+              </div>
+              <h3 className="font-display text-xl font-semibold text-foreground mb-3 group-hover:gradient-text transition-all duration-300">{s.title}</h3>
+              <p className="font-body text-sm text-muted-foreground leading-relaxed mb-4">{s.desc}</p>
+              <div className="flex items-center gap-2 text-primary text-xs font-semibold opacity-0 group-hover:opacity-100 transition-opacity duration-300 font-body">
+                 Get Support <ArrowRight size={12} className="group-hover:translate-x-1 transition-transform" />
+              </div>
+            </a>
           </motion.div>
         ))}
       </div>

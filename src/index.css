@@ -9,120 +9,120 @@
 
 @layer base {
   :root {
-    --background: 40 30% 98%;
-    --foreground: 160 10% 12%;
+    --background: 342 20% 81%; /* #D8C7CC */
+    --foreground: 348 50% 24%; /* #5A1E2A */
 
-    --card: 0 0% 100%;
-    --card-foreground: 160 10% 12%;
+    --card: 339 31% 66%; /* #C08FA0 */
+    --card-foreground: 348 50% 24%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 160 10% 12%;
+    --popover: 339 31% 66%;
+    --popover-foreground: 348 50% 24%;
 
-    --primary: 152 32% 38%;
-    --primary-foreground: 40 50% 98%;
+    --primary: 341 26% 48%; /* #9A5A6E */
+    --primary-foreground: 342 20% 81%;
 
-    --secondary: 40 25% 94%;
-    --secondary-foreground: 160 10% 20%;
+    --secondary: 332 28% 59%; /* #B27A94 */
+    --secondary-foreground: 348 50% 24%;
 
-    --muted: 40 18% 94%;
-    --muted-foreground: 160 6% 48%;
+    --muted: 339 31% 66%;
+    --muted-foreground: 347 45% 33%;
 
-    --accent: 152 18% 90%;
-    --accent-foreground: 152 32% 28%;
+    --accent: 332 28% 59%;
+    --accent-foreground: 348 50% 24%;
 
     --destructive: 0 60% 50%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 40 15% 90%;
-    --input: 40 15% 90%;
-    --ring: 152 25% 55%;
+    --border: 332 28% 59%;
+    --input: 339 31% 66%;
+    --ring: 341 26% 48%;
 
     --radius: 0.75rem;
 
-    --sage: 152 32% 38%;
-    --sage-light: 152 22% 90%;
-    --sage-dark: 152 30% 26%;
-    --sand: 33 30% 88%;
-    --sand-light: 40 33% 96%;
-    --sand-dark: 33 20% 55%;
-    --cream: 40 35% 96%;
-    --warm-white: 40 50% 99%;
+    --sage: 341 26% 48%;
+    --sage-light: 339 31% 66%;
+    --sage-dark: 347 45% 33%;
+    --sand: 342 20% 81%;
+    --sand-light: 342 30% 90%;
+    --sand-dark: 332 28% 59%;
+    --cream: 342 20% 81%;
+    --warm-white: 342 30% 90%;
 
     --font-display: 'Cormorant Garamond', serif;
     --font-body: 'Outfit', sans-serif;
 
     /* Premium design tokens */
-    --glass-bg: hsl(40 30% 98% / 0.7);
-    --glass-border: hsl(40 15% 90% / 0.5);
-    --glass-shadow: 0 8px 32px hsl(152 32% 38% / 0.08);
-    --gradient-sage: linear-gradient(135deg, hsl(152 32% 38%), hsl(152 28% 48%));
-    --gradient-warm: linear-gradient(135deg, hsl(40 35% 96%), hsl(40 30% 98%));
-    --gradient-hero: linear-gradient(180deg, hsl(40 30% 98% / 0) 0%, hsl(40 30% 98% / 0.85) 100%);
-    --shadow-soft: 0 4px 20px hsl(152 20% 30% / 0.06);
-    --shadow-elevated: 0 12px 40px hsl(152 20% 30% / 0.1);
-    --shadow-glow: 0 0 30px hsl(152 32% 38% / 0.15);
+    --glass-bg: hsl(342 20% 81% / 0.7);
+    --glass-border: hsl(339 31% 66% / 0.5);
+    --glass-shadow: 0 8px 32px hsl(347 45% 33% / 0.08);
+    --gradient-sage: linear-gradient(135deg, hsl(341 26% 48%), hsl(339 31% 66%));
+    --gradient-warm: linear-gradient(135deg, hsl(339 31% 66%), hsl(342 20% 81%));
+    --gradient-hero: linear-gradient(180deg, hsl(342 20% 81% / 0) 0%, hsl(342 20% 81% / 0.85) 100%);
+    --shadow-soft: 0 4px 20px hsl(348 50% 24% / 0.06);
+    --shadow-elevated: 0 12px 40px hsl(348 50% 24% / 0.1);
+    --shadow-glow: 0 0 30px hsl(341 26% 48% / 0.15);
 
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 160 10% 12%;
-    --sidebar-primary: 152 32% 38%;
-    --sidebar-primary-foreground: 40 50% 98%;
-    --sidebar-accent: 152 18% 90%;
-    --sidebar-accent-foreground: 152 32% 28%;
-    --sidebar-border: 40 15% 90%;
-    --sidebar-ring: 152 25% 55%;
-    --chart-1: 152 32% 45%;
-    --chart-2: 185 20% 55%;
-    --chart-3: 33 25% 50%;
-    --chart-4: 84 18.9% 82.8%;
-    --chart-5: 70 18.8% 76.9%;
-    --sidebar: 40 50% 98%;
+    --sidebar-background: 342 20% 81%;
+    --sidebar-foreground: 348 50% 24%;
+    --sidebar-primary: 341 26% 48%;
+    --sidebar-primary-foreground: 342 20% 81%;
+    --sidebar-accent: 339 31% 66%;
+    --sidebar-accent-foreground: 348 50% 24%;
+    --sidebar-border: 332 28% 59%;
+    --sidebar-ring: 341 26% 48%;
+    --chart-1: 341 26% 48%;
+    --chart-2: 339 31% 66%;
+    --chart-3: 347 45% 33%;
+    --chart-4: 332 28% 59%;
+    --chart-5: 348 50% 24%;
+    --sidebar: 342 20% 81%;
     --font-sans: 'Outfit', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
     --font-serif: 'Cormorant Garamond', ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
     --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-    --shadow-2xs: 0 1px 3px 0px hsl(0 0% 0% / 0.03);
-    --shadow-xs: 0 1px 3px 0px hsl(0 0% 0% / 0.04);
-    --shadow-sm: 0 2px 8px -1px hsl(152 20% 30% / 0.06);
-    --shadow: 0 4px 16px -2px hsl(152 20% 30% / 0.08);
-    --shadow-md: 0 6px 24px -4px hsl(152 20% 30% / 0.08);
-    --shadow-lg: 0 12px 40px -8px hsl(152 20% 30% / 0.1);
-    --shadow-xl: 0 20px 60px -12px hsl(152 20% 30% / 0.12);
-    --shadow-2xl: 0 25px 80px -16px hsl(152 20% 30% / 0.15);
+    --shadow-2xs: 0 1px 3px 0px hsl(348 50% 24% / 0.03);
+    --shadow-xs: 0 1px 3px 0px hsl(348 50% 24% / 0.04);
+    --shadow-sm: 0 2px 8px -1px hsl(348 50% 24% / 0.06);
+    --shadow: 0 4px 16px -2px hsl(348 50% 24% / 0.08);
+    --shadow-md: 0 6px 24px -4px hsl(348 50% 24% / 0.08);
+    --shadow-lg: 0 12px 40px -8px hsl(348 50% 24% / 0.1);
+    --shadow-xl: 0 20px 60px -12px hsl(348 50% 24% / 0.12);
+    --shadow-2xl: 0 25px 80px -16px hsl(348 50% 24% / 0.15);
     --tracking-normal: 0em;
     --spacing: 0.25rem;
   }
   .dark {
-    --background: 160 12% 8%;
-    --foreground: 40 20% 95%;
-    --card: 160 10% 12%;
-    --card-foreground: 40 20% 95%;
-    --popover: 160 10% 12%;
-    --popover-foreground: 40 20% 95%;
-    --primary: 152 30% 55%;
-    --primary-foreground: 160 12% 8%;
-    --secondary: 160 8% 18%;
-    --secondary-foreground: 40 20% 95%;
-    --muted: 160 8% 18%;
-    --muted-foreground: 152 10% 60%;
-    --accent: 160 8% 18%;
-    --accent-foreground: 40 20% 95%;
-    --border: 160 8% 20%;
-    --input: 160 8% 22%;
-    --ring: 152 25% 45%;
+    --background: 348 50% 24%; /* #5A1E2A */
+    --foreground: 342 20% 81%; /* #D8C7CC */
+    --card: 347 45% 33%; /* #7A2E3E */
+    --card-foreground: 342 20% 81%;
+    --popover: 347 45% 33%;
+    --popover-foreground: 342 20% 81%;
+    --primary: 332 28% 59%; /* #B27A94 */
+    --primary-foreground: 348 50% 24%;
+    --secondary: 341 26% 48%; /* #9A5A6E */
+    --secondary-foreground: 342 20% 81%;
+    --muted: 347 45% 33%;
+    --muted-foreground: 339 31% 66%; /* #C08FA0 */
+    --accent: 341 26% 48%;
+    --accent-foreground: 342 20% 81%;
+    --border: 347 45% 33%;
+    --input: 347 45% 33%;
+    --ring: 332 28% 59%;
     --destructive: 0 55% 55%;
-    --destructive-foreground: 40 20% 95%;
-    --chart-1: 152 30% 50%;
-    --chart-2: 185 18% 55%;
-    --chart-3: 33 22% 55%;
-    --chart-4: 304 26.5% 62.7%;
-    --chart-5: 16 24.6% 64.5%;
-    --sidebar: 160 10% 12%;
-    --sidebar-foreground: 40 20% 95%;
-    --sidebar-primary: 152 30% 50%;
-    --sidebar-primary-foreground: 40 20% 95%;
-    --sidebar-accent: 160 8% 18%;
-    --sidebar-accent-foreground: 40 20% 95%;
-    --sidebar-border: 160 8% 20%;
-    --sidebar-ring: 152 25% 45%;
+    --destructive-foreground: 342 20% 81%;
+    --chart-1: 332 28% 59%;
+    --chart-2: 339 31% 66%;
+    --chart-3: 341 26% 48%;
+    --chart-4: 347 45% 33%;
+    --chart-5: 348 50% 24%;
+    --sidebar: 348 50% 24%;
+    --sidebar-foreground: 342 20% 81%;
+    --sidebar-primary: 332 28% 59%;
+    --sidebar-primary-foreground: 348 50% 24%;
+    --sidebar-accent: 341 26% 48%;
+    --sidebar-accent-foreground: 342 20% 81%;
+    --sidebar-border: 347 45% 33%;
+    --sidebar-ring: 332 28% 59%;
     --shadow-2xs: 0 1px 3px 0px hsl(0 0% 0% / 0.1);
     --shadow-xs: 0 1px 3px 0px hsl(0 0% 0% / 0.1);
     --shadow-sm: 0 2px 8px -1px hsl(0 0% 0% / 0.15);
@@ -173,7 +173,7 @@
     background: hsl(0 0% 100% / 0.65);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
-    border: 1px solid hsl(40 15% 90% / 0.6);
+    border: 1px solid hsl(339 31% 66% / 0.6);
     box-shadow: var(--shadow-soft);
   }
 
@@ -183,6 +183,18 @@
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+  }
+
+  /* Custom Pulsing Notification Dot */
+  .notification-dot {
+    @apply absolute w-2.5 h-2.5 rounded-full bg-red-500 shadow-[0_0_10px_rgba(239,68,68,0.5)];
+    animation: pulse-soft 2s infinite;
+  }
+
+  @keyframes pulse-soft {
+    0% { transform: scale(0.95); opacity: 0.8; box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
+    70% { transform: scale(1.1); opacity: 1; box-shadow: 0 0 0 8px rgba(239, 68, 68, 0); }
+    100% { transform: scale(0.95); opacity: 0.8; box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
   }
 
   /* Smooth section divider */

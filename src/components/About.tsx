@@ -68,7 +68,7 @@ const About = () => (
           <div className="flex gap-8 md:gap-12">
             {[
               { num: "500+", label: "Clients Guided" },
-              { num: "8+", label: "Years Experience" },
+              { num: "5+", label: "Years Experience" },
               { num: "95%", label: "Satisfaction" },
             ].map((stat, i) => (
               <motion.div

@@ -3,7 +3,9 @@ import { motion } from "framer-motion";
 import { Lock, Mail, KeyRound } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { supabase } from "@/integrations/supabase/client";
+import { auth, db } from "@/lib/firebase";
+import { signInWithEmailAndPassword, signOut } from "firebase/auth";
+import { doc, getDoc } from "firebase/firestore";
 import { toast } from "@/components/ui/sonner";
 
 interface AdminLoginProps {
@@ -19,24 +21,25 @@ const AdminLogin = ({ onLogin }: AdminLoginProps) => {
     e.preventDefault();
     setLoading(true);
     try {
-      const { error } = await supabase.auth.signInWithPassword({ email, password });
-      if (error) throw error;
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
 
-      // Check admin role
-      const { data: roles, error: roleErr } = await supabase
-        .from("user_roles")
-        .select("role")
-        .eq("role", "admin");
+      // Check admin role in Firestore
+      const userDoc = await getDoc(doc(db, "users", user.uid));
 
-      if (roleErr || !roles || roles.length === 0) {
-        await supabase.auth.signOut();
+      if (!userDoc.exists() || userDoc.data().role !== "admin") {
+        await signOut(auth);
         toast("Access denied. Admin privileges required.");
         return;
       }
 
       onLogin();
     } catch (err: any) {
-      toast(err.message || "Login failed.");
+      if (err.code === "auth/invalid-credential" || err.code === "auth/user-not-found" || err.code === "auth/wrong-password") {
+        toast("Invalid credentials. Please check your email and password.");
+      } else {
+        toast(err.message || "Login failed.");
+      }
     } finally {
       setLoading(false);
     }

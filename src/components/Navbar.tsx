@@ -2,7 +2,10 @@ import { useState, useEffect } from "react";
 import { Menu, X, LogOut } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { supabase } from "@/integrations/supabase/client";
+import { onAuthStateChanged, signOut } from "firebase/auth";
+import { collection, query, orderBy, onSnapshot, where } from "firebase/firestore";
+import { auth, db } from "@/lib/firebase";
+import Logo from "./Logo";
 
 const navLinks = [
   { label: "Home", href: "/home" },
@@ -21,6 +24,7 @@ const Navbar = ({ transparent = true }: NavbarProps) => {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [user, setUser] = useState<any>(null);
+  const [unreadCount, setUnreadCount] = useState(0);
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -31,17 +35,45 @@ const Navbar = ({ transparent = true }: NavbarProps) => {
   }, []);
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setUser(session?.user ?? null);
+    let unsubscribeDiscovery: (() => void) | undefined;
+
+    const unsubscribeAuth = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+      
+      if (currentUser) {
+        const userId = currentUser.uid;
+        
+        // Finalized strict query: user_id (snake_case) only
+        const q = query(collection(db, "discovery_requests"), where("user_id", "==", userId));
+
+        unsubscribeDiscovery = onSnapshot(q, (snapshot) => {
+          let count = 0;
+          snapshot.docs.forEach(doc => {
+            const data = doc.data();
+            if (data.messages && Array.isArray(data.messages)) {
+              // Count messages from admin that haven't been read by the user
+              const unread = data.messages.filter((m: any) => m.sender === "admin" && m.read === false);
+              count += unread.length;
+            }
+          });
+          setUnreadCount(count);
+        }, (err) => {
+          console.error("Navbar: Notification listener error:", err);
+        });
+      } else {
+        setUnreadCount(0);
+        if (unsubscribeDiscovery) unsubscribeDiscovery();
+      }
     });
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null);
-    });
-    return () => subscription.unsubscribe();
+
+    return () => {
+      unsubscribeAuth();
+      if (unsubscribeDiscovery) unsubscribeDiscovery();
+    };
   }, []);
 
   const handleLogout = async () => {
-    await supabase.auth.signOut();
+    await signOut(auth);
     setOpen(false);
     navigate("/");
   };
@@ -69,8 +101,8 @@ const Navbar = ({ transparent = true }: NavbarProps) => {
   return (
     <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${bgClass}`}>
       <div className="container mx-auto flex items-center justify-between py-4 px-4 md:px-8">
-        <Link to="/home" className="font-display text-2xl md:text-3xl font-semibold tracking-wide text-foreground">
-          Melodia
+        <Link to="/home" className="transition-transform duration-300 hover:scale-[1.02]">
+          <Logo />
         </Link>
 
         {/* Desktop nav */}
@@ -90,13 +122,18 @@ const Navbar = ({ transparent = true }: NavbarProps) => {
             <>
               <Link
                 to="/dashboard"
-                className={`font-body text-sm tracking-wide transition-colors duration-300 ${
+                className={`relative font-body text-sm tracking-wide transition-colors duration-300 ${
                   location.pathname === "/dashboard"
                     ? "text-primary font-medium"
                     : "text-muted-foreground hover:text-foreground"
                 }`}
               >
                 Dashboard
+                {unreadCount > 0 && (
+                  <span className="absolute -top-1.5 -right-3 min-w-[18px] h-[18px] px-1 bg-red-500 text-white text-[10px] font-bold flex items-center justify-center rounded-full shadow-[0_0_10px_rgba(239,68,68,0.5)] animate-pulse">
+                    {unreadCount}
+                  </span>
+                )}
               </Link>
               <button
                 onClick={handleLogout}
@@ -160,9 +197,18 @@ const Navbar = ({ transparent = true }: NavbarProps) => {
               {user ? (
                 <>
                   <li>
-                    <Link to="/dashboard" onClick={() => setOpen(false)} className={mobileLinkClass("/dashboard")}>
+                    <Link 
+                      to="/dashboard" 
+                      onClick={() => setOpen(false)} 
+                      className={`${mobileLinkClass("/dashboard")} flex items-center gap-2`}
+                    >
                       Dashboard
-                    </Link>
+                    {unreadCount > 0 && (
+                      <span className="min-w-[18px] h-[18px] px-1 bg-red-500 text-white text-[10px] font-bold flex items-center justify-center rounded-full shadow-[0_0_10px_rgba(239,68,68,0.5)] ml-2">
+                        {unreadCount}
+                      </span>
+                    )}
+                  </Link>
                   </li>
                   <li className="mt-2">
                     <button

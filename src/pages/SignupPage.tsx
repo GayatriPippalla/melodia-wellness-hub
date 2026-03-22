@@ -6,11 +6,15 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Slider } from "@/components/ui/slider";
-import { supabase } from "@/integrations/supabase/client";
+import { auth, db } from "@/lib/firebase";
+import { createUserWithEmailAndPassword, signOut } from "firebase/auth";
+import { doc, setDoc, serverTimestamp } from "firebase/firestore";
 import { toast } from "@/components/ui/sonner";
 import { BackgroundPaths } from "@/components/ui/background-paths";
 import About from "@/components/About";
 import Footer from "@/components/Footer";
+
+import Logo from "@/components/Logo";
 
 const SignupPage = () => {
   const [form, setForm] = useState({
@@ -42,25 +46,21 @@ const SignupPage = () => {
 
     setLoading(true);
     try {
-      const { data: authData, error: authError } = await supabase.auth.signUp({
+      const userCredential = await createUserWithEmailAndPassword(auth, form.email, form.password);
+      const user = userCredential.user;
+
+      await setDoc(doc(db, "users", user.uid), {
+        id: user.uid,
         email: form.email,
-        password: form.password,
+        role: "user",
+        status: "pending",
+        fullName: form.fullName,
+        wellnessGoal: form.wellnessGoal,
+        stressLevel: form.stressLevel,
+        createdAt: serverTimestamp()
       });
-      if (authError) throw authError;
 
-      const userId = authData.user?.id;
-      if (!userId) throw new Error("Signup failed. Please try again.");
-
-      const { error: profileError } = await supabase.from("profiles").insert({
-        user_id: userId,
-        full_name: form.fullName,
-        email: form.email,
-        wellness_goal: form.wellnessGoal,
-        stress_level: form.stressLevel,
-      });
-      if (profileError) throw profileError;
-
-      await supabase.auth.signOut();
+      await signOut(auth);
       setSuccess(true);
     } catch (err: any) {
       toast(err.message || "Signup failed. Please try again.");
@@ -110,8 +110,8 @@ const SignupPage = () => {
       {/* Header */}
       <div className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">
         <div className="container mx-auto flex items-center justify-between py-4 px-4 md:px-8">
-          <Link to="/" className="font-display text-2xl md:text-3xl font-semibold tracking-wide text-foreground">
-            Melodia
+          <Link to="/" className="transition-transform duration-300 hover:scale-[1.02]">
+            <Logo />
           </Link>
         </div>
       </div>
@@ -125,11 +125,8 @@ const SignupPage = () => {
               transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
             >
               <div className="text-center mb-10">
-                <div className="inline-flex items-center gap-2 rounded-full bg-accent px-4 py-1.5 mb-5">
-                  <span className="w-1.5 h-1.5 rounded-full bg-primary" />
-                  <span className="font-body text-xs uppercase tracking-[0.2em] text-accent-foreground">
-                    Join Us
-                  </span>
+                <div className="mx-auto mb-4 flex justify-center">
+                  <Logo showText={false} className="w-28 h-28" />
                 </div>
                 <h1 className="font-display text-4xl md:text-5xl font-light text-foreground leading-tight">
                   Begin your <span className="italic gradient-text">journey</span>

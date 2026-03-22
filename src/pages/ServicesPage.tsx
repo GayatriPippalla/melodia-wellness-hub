@@ -80,13 +80,17 @@ const ServicesPage = () => (
     <PageNavbar />
 
     {/* Page Header */}
-    <section className="pt-32 pb-16 md:pt-40 md:pb-20 bg-cream">
-      <div className="container mx-auto px-4 md:px-8 text-center">
+    <div className="relative h-auto pt-16 pb-8 md:pt-24 md:pb-12 overflow-hidden bg-[#D8C7CC]">
+      {/* Static decorative background elements */}
+      <div className="absolute inset-0 bg-gradient-to-b from-[#FFFFFF]/20 to-transparent pointer-events-none" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-[#F5ECE9]/30 blur-[120px] rounded-full pointer-events-none" />
+      
+      <div className="container mx-auto px-4 md:px-8 text-center mt-4 relative z-10">
         <motion.p
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="font-body text-sm uppercase tracking-[0.25em] text-primary mb-4"
+          className="font-body text-sm uppercase tracking-[0.25em] text-primary mb-2"
         >
           What We Offer
         </motion.p>
@@ -102,15 +106,15 @@ const ServicesPage = () => (
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.25 }}
-          className="font-body text-muted-foreground mt-5 max-w-lg mx-auto"
+          className="font-body text-muted-foreground mt-3 max-w-lg mx-auto"
         >
           Comprehensive wellness services designed to nurture every dimension of your well-being.
         </motion.p>
       </div>
-    </section>
+    </div>
 
     {/* Service Cards Grid */}
-    <section className="py-20 md:py-28 bg-background">
+    <section className="pt-8 pb-20 md:pt-12 md:pb-28 bg-background">
       <div className="container mx-auto px-4 md:px-8">
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 xl:gap-8">
           {services.map((s, i) => (
@@ -135,7 +139,7 @@ const ServicesPage = () => (
                 {s.desc}
               </p>
               <a
-                href="/#contact"
+                href={`/discovery?topic=${encodeURIComponent(s.title)}`}
                 className="inline-flex items-center gap-2 font-body text-sm font-medium text-primary hover:text-sage-dark transition-colors group/btn"
               >
                 Book Session
@@ -172,7 +176,7 @@ const ServicesPage = () => (
             your path to balance and vitality.
           </p>
           <a
-            href="/#contact"
+            href="/discovery"
             className="inline-flex items-center justify-center gap-2 rounded-full bg-primary px-8 py-4 font-body text-sm font-medium text-primary-foreground hover:bg-sage-dark transition-colors"
           >
             Book a Discovery Call

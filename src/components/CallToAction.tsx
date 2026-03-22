@@ -39,7 +39,7 @@ const CallToAction = () => (
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <a
-            href="/contact"
+            href="/discovery"
             className="group relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-full bg-primary px-8 py-4 font-body text-sm font-medium text-primary-foreground transition-all duration-300 hover:shadow-glow hover:scale-[1.02]"
           >
             <span className="relative z-10 flex items-center gap-2">

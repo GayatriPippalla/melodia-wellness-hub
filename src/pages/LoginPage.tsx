@@ -4,11 +4,15 @@ import { Lock, Mail, KeyRound, Clock } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { supabase } from "@/integrations/supabase/client";
+import { auth, db } from "@/lib/firebase";
+import { signInWithEmailAndPassword, onAuthStateChanged, signOut } from "firebase/auth";
+import { doc, getDoc } from "firebase/firestore";
 import { toast } from "@/components/ui/sonner";
 import { BackgroundPaths } from "@/components/ui/background-paths";
 import About from "@/components/About";
 import Footer from "@/components/Footer";
+
+import Logo from "@/components/Logo";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
@@ -18,11 +22,12 @@ const LoginPage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (session) {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
         navigate("/home", { replace: true });
       }
     });
+    return () => unsubscribe();
   }, [navigate]);
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -31,45 +36,43 @@ const LoginPage = () => {
     setPendingMessage(false);
 
     try {
-      const { error } = await supabase.auth.signInWithPassword({ email, password });
-      if (error) throw error;
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
 
-      const { data: profile, error: profileErr } = await supabase
-        .from("profiles")
-        .select("status")
-        .single();
-
-      if (profileErr || !profile) {
-        const { data: roles } = await supabase
-          .from("user_roles")
-          .select("role")
-          .eq("role", "admin");
-
-        if (roles && roles.length > 0) {
-          navigate("/admin");
-          return;
-        }
-
-        await supabase.auth.signOut();
+      const userDoc = await getDoc(doc(db, "users", user.uid));
+      
+      if (!userDoc.exists()) {
+        await signOut(auth);
         toast("Account not found. Please sign up first.");
         return;
       }
 
+      const profile = userDoc.data();
+
+      if (profile.role === "admin") {
+        navigate("/admin");
+        return;
+      }
+
       if (profile.status === "pending") {
-        await supabase.auth.signOut();
+        await signOut(auth);
         setPendingMessage(true);
         return;
       }
 
       if (profile.status === "rejected") {
-        await supabase.auth.signOut();
+        await signOut(auth);
         toast("Your account has been rejected. Please contact support.");
         return;
       }
 
       navigate("/home");
     } catch (err: any) {
-      toast(err.message || "Login failed.");
+      if (err.code === "auth/invalid-credential" || err.code === "auth/user-not-found" || err.code === "auth/wrong-password") {
+        toast("Invalid credentials. Please check your email and password.");
+      } else {
+        toast(err.message || "Login failed.");
+      }
     } finally {
       setLoading(false);
     }
@@ -80,9 +83,9 @@ const LoginPage = () => {
       {/* Header */}
       <div className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">
         <div className="container mx-auto flex items-center justify-between py-4 px-4 md:px-8">
-          <span className="font-display text-2xl md:text-3xl font-semibold tracking-wide text-foreground">
-            Melodia
-          </span>
+          <Link to="/" className="transition-transform duration-300 hover:scale-[1.02]">
+            <Logo />
+          </Link>
         </div>
       </div>
 
@@ -96,8 +99,8 @@ const LoginPage = () => {
               transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
             >
               <div className="text-center mb-10">
-                <div className="w-16 h-16 rounded-2xl bg-accent flex items-center justify-center mx-auto mb-4">
-                  <Lock size={28} className="text-primary" />
+                <div className="mx-auto mb-4 flex justify-center">
+                  <Logo showText={false} className="w-24 h-24" />
                 </div>
                 <h1 className="font-display text-4xl md:text-5xl font-light text-foreground leading-tight">
                   Welcome to <span className="italic gradient-text">Melodia</span>

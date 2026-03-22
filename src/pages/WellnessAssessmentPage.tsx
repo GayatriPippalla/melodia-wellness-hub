@@ -6,7 +6,8 @@ import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { supabase } from "@/integrations/supabase/client";
+import { db } from "@/lib/firebase";
+import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { toast } from "@/components/ui/sonner";
 
 const sleepOptions = ["Excellent", "Good", "Fair", "Poor", "Very Poor"];
@@ -18,10 +19,10 @@ const WellnessAssessmentPage = () => {
   const [form, setForm] = useState({
     name: "",
     email: "",
-    stress_level: 5,
-    sleep_quality: "",
-    work_life_balance: "",
-    main_goal: "",
+    stressLevel: 5,
+    sleepQuality: "",
+    workLifeBalance: "",
+    mainGoal: "",
   });
 
   const update = (field: string, value: string | number) =>
@@ -29,21 +30,21 @@ const WellnessAssessmentPage = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!form.name || !form.email || !form.sleep_quality || !form.work_life_balance || !form.main_goal) {
+    if (!form.name || !form.email || !form.sleepQuality || !form.workLifeBalance || !form.mainGoal) {
       toast("Please fill in all fields.");
       return;
     }
     setLoading(true);
     try {
-      const { error } = await supabase.from("wellness_assessments").insert({
+      await addDoc(collection(db, "wellness_assessments"), {
         name: form.name,
         email: form.email,
-        stress_level: form.stress_level,
-        sleep_quality: form.sleep_quality,
-        work_life_balance: form.work_life_balance,
-        main_goal: form.main_goal,
+        stressLevel: form.stressLevel,
+        sleepQuality: form.sleepQuality,
+        workLifeBalance: form.workLifeBalance,
+        mainGoal: form.mainGoal,
+        createdAt: serverTimestamp(),
       });
-      if (error) throw error;
       setSubmitted(true);
     } catch (err: any) {
       toast("Something went wrong. Please try again.");
@@ -145,14 +146,14 @@ const WellnessAssessmentPage = () => {
             {/* Stress Level */}
             <div>
               <label className="font-body text-sm font-medium text-foreground mb-3 block">
-                Stress Level: <span className="text-primary font-semibold">{form.stress_level}/10</span>
+                Stress Level: <span className="text-primary font-semibold">{form.stressLevel}/10</span>
               </label>
               <input
                 type="range"
                 min={1}
                 max={10}
-                value={form.stress_level}
-                onChange={(e) => update("stress_level", parseInt(e.target.value))}
+                value={form.stressLevel}
+                onChange={(e) => update("stressLevel", parseInt(e.target.value))}
                 className="w-full accent-primary h-2"
               />
               <div className="flex justify-between font-body text-xs text-muted-foreground mt-1">
@@ -169,9 +170,9 @@ const WellnessAssessmentPage = () => {
                   <button
                     key={opt}
                     type="button"
-                    onClick={() => update("sleep_quality", opt)}
+                    onClick={() => update("sleepQuality", opt)}
                     className={`px-4 py-2 rounded-full font-body text-sm transition-colors border ${
-                      form.sleep_quality === opt
+                      form.sleepQuality === opt
                         ? "bg-primary text-primary-foreground border-primary"
                         : "bg-background text-muted-foreground border-border hover:border-primary/50"
                     }`}
@@ -190,9 +191,9 @@ const WellnessAssessmentPage = () => {
                   <button
                     key={opt}
                     type="button"
-                    onClick={() => update("work_life_balance", opt)}
+                    onClick={() => update("workLifeBalance", opt)}
                     className={`px-4 py-2 rounded-full font-body text-sm transition-colors border ${
-                      form.work_life_balance === opt
+                      form.workLifeBalance === opt
                         ? "bg-primary text-primary-foreground border-primary"
                         : "bg-background text-muted-foreground border-border hover:border-primary/50"
                     }`}
@@ -209,8 +210,8 @@ const WellnessAssessmentPage = () => {
                 What is your main goal for wellness?
               </label>
               <Textarea
-                value={form.main_goal}
-                onChange={(e) => update("main_goal", e.target.value)}
+                value={form.mainGoal}
+                onChange={(e) => update("mainGoal", e.target.value)}
                 placeholder="Describe what you'd like to achieve on your wellness journey…"
                 className="font-body min-h-[120px]"
                 required
